@@ -15,32 +15,91 @@
 
 Developing a paper trading Crypto Currency Trading App for those who wish they had money to put into crypto but dont. 
 
-## API
+## Backend API
 
-From the returned data we will be able to see the some of the data depending on the endpoints. Such as :
+From the returned data we will be able to see the some of the data depending on the endpoints. We will have two collections, users and transactions. They will be displayed as follows as examples:
 
 
 ```
- "data": [
+ "wallets":
+{
+	Name: Taylor Hughes,
+	Password: **********,
+	Email: example@aol.com
+	Coins: [{
+			Coin: BTC,
+			Amount: 0.23456
+		},
+		{
+			Coin: ETH,
+			Amount: 0.8543
+		},
+		{
+			Coin: USD,
+			Amount: 20.34
+		}],
+	Transactions: [
+				746352,
+				837435,
+				948363
+			]
+}
+```
+
+```
+ "transactions":
+{
+	_id: 746352,
+	userID: 3103670287
+	coinSold: BTC,
+	amountSold: 0.0000543
+	coinBought: ETH,
+	amountBought: 0.546222
+	Date: 05/15/21 4:35 PM
+}
+
+```
+
+and below is the schema:
+```
+ "wallets":
+{
+	name: String,
+	password: String,
+	email: String,
+	coins: [
     {
-      "id": 1,
-      "name": "Bitcoin",
-      "symbol": "BTC",
-      "slug": "bitcoin",
-      "rank": 1,
-      "is_active": 1,
-      "first_historical_data": "2013-04-28T18:47:21.000Z",
-      "last_historical_data": "2021-05-21T01:19:03.000Z",
-      "platform": null
-    },
-         
+      coin: String,
+      amount: Number
+    }
+  ],
+	transactions: [
+    Number
+  ]
+}
+```
+```
+ "transactions":
+{
+	_id: MongoID,
+	userID: String,
+	coinSold: String,
+	soldAmount: Number
+	coinBought: String,
+	boughtAmount: Number,
+	Date: Date
+}
+
 ```
 
-
-## Wireframes/ UX DESIGN COMP
-(https://www.behance.net/gallery/119211101/UIUX-Design-Cryptocurrency-payment-application?tracking_source=search_projects_recommended%7Cux%20case%20study)
-
-
+### Routes
+| Path | Route | Method | Return |
+| --- | --- | --- | --- |
+| '/' | Welcome Route | GET | "Thanks for accessing the Crypto API |
+| '/wallets' | Wallet Index | GET | All Users and their wallets |
+| '/wallets' | Wallet Create | POST | Successful status message |
+| '/wallets/:id' | Wallet Update | PUT | Finds wallet by ID and changes coins field based on what user exchanged |
+| '/wallets/login' | Login Verification Route | GET | Login successful or login failed status |
 
 
 ### MVP/PostMVP - 5min
