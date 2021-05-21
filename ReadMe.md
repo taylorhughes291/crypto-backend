@@ -23,22 +23,23 @@ From the returned data we will be able to see the some of the data depending on 
 ```
  "wallets":
 {
-	Name: Taylor Hughes,
-	Password: **********,
-	Email: example@aol.com
-	Coins: [{
-			Coin: BTC,
-			Amount: 0.23456
+	name: Taylor Hughes,
+	password: **********,
+  mobile: 3103670287,
+	email: example@aol.com
+	coins: [{
+			coin: BTC,
+			amount: 0.23456
 		},
 		{
-			Coin: ETH,
-			Amount: 0.8543
+			coin: ETH,
+			amount: 0.8543
 		},
 		{
-			Coin: USD,
-			Amount: 20.34
+			coin: USD,
+			amount: 20.34
 		}],
-	Transactions: [
+	transactions: [
 				746352,
 				837435,
 				948363
@@ -67,6 +68,7 @@ and below is the schema:
 	name: String,
 	password: String,
 	email: String,
+  mobile: String,
 	coins: [
     {
       coin: String,
@@ -82,7 +84,7 @@ and below is the schema:
  "transactions":
 {
 	_id: MongoID,
-	userID: String,
+	userID: MongoID,
 	coinSold: String,
 	soldAmount: Number
 	coinBought: String,
@@ -96,10 +98,13 @@ and below is the schema:
 | Path | Route | Method | Return |
 | --- | --- | --- | --- |
 | '/' | Welcome Route | GET | "Thanks for accessing the Crypto API |
-| '/wallets' | Wallet Index | GET | All Users and their wallets |
+| '/wallets/:id' | Wallet Index | GET | All Users and their wallets |
 | '/wallets' | Wallet Create | POST | Successful status message |
-| '/wallets/:id' | Wallet Update | PUT | Finds wallet by ID and changes coins field based on what user exchanged |
-| '/wallets/login' | Login Verification Route | GET | Login successful or login failed status |
+| '/wallets/:id' | Wallet Update | PUT | Finds wallet by user ID and changes coins field based on what user exchanged |
+| '/wallets/login/:mobile/:password' | Login Verification Route | GET | Login successful or login failed status |
+| '/transactions/:id' | Transactions Index | GET | All transactions with userID :id |
+| 'transactions/:id' | Transactions create route | POST | Successful status message |
+
 
 
 ### MVP/PostMVP - 5min
