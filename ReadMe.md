@@ -100,10 +100,9 @@ and below is the schema:
 | '/' | Welcome Route | GET | "Thanks for accessing the Crypto API |
 | '/wallets/:id' | Wallet Index | GET | All Users and their wallets |
 | '/wallets' | Wallet Create | POST | Successful status message |
-| '/wallets/:id' | Wallet Update | PUT | Finds wallet by user ID and changes coins field based on what user exchanged |
 | '/wallets/login/:mobile/:password' | Login Verification Route | GET | Login successful or login failed status |
 | '/transactions/:id' | Transactions Index | GET | All transactions with userID :id |
-| 'transactions/:id' | Transactions create route | POST | Successful status message |
+| '/transactions' | Transactions create route | POST | Successful status message |
 
 
 
