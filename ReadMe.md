@@ -101,7 +101,6 @@ and below is the schema:
 | '/wallets/:id' | Wallet Index | GET | All Users and their wallets |
 | '/wallets' | Wallet Create | POST | Successful status message |
 | '/wallets/login/:mobile/:password' | Login Verification Route | GET | Login successful or login failed status |
-| '/transactions/:id' | Transactions Index | GET | All transactions with userID :id |
 | '/transactions' | Transactions create route | POST | Successful status message |
 
 
@@ -153,8 +152,58 @@ As of now. may grow or change at the flow of the project.
 
 ## Code Snippet
 
-This code snippet dynamically generates 3 cards. Im proud of it because I was able to make it work.
+This code snippet takes a crypto transaction and updates both the transactions collection and the wallet collection. Im proud of it because It's the most complex data manipulation I've done on the backend so far.
 
 ```
-const mongoose = require 'mongoose'
+router.post('/', async (req, res) => {
+    const transactionBody = req.body.transaction
+    const walletBody = req.body.wallet
+    const newTransaction = await Transaction.create(transactionBody)
+    isBoughtCoin = walletBody.coins.some((item, index) => {
+        return (newTransaction.coinBought === item.coin)
+    })
+    let newCoins = []
+    if (isBoughtCoin) {
+        newCoins = walletBody.coins.map((item, index) => {
+            if (item.coin === transactionBody.coinSold) {
+                return ({
+                    "coin": item.coin,
+                    "amount": item.amount - transactionBody.soldAmount
+                })
+            } else if (item.coin === transactionBody.coinBought) {
+                return ({
+                    "coin": item.coin,
+                    "amount": item.amount + transactionBody.boughtAmount
+                })
+            } else {
+                return(
+                    item
+                )
+            }
+        })
+    } else {
+        walletBody.coins.push({
+            "coin": transactionBody.coinBought,
+            "amount": transactionBody.boughtAmount
+        })
+        newCoins = walletBody.coins.map((item, index) => {
+            if (item.coin === transactionBody.coinSold) {
+                return ({
+                    "coin": item.coin,
+                    "amount": item.amount - transactionBody.soldAmount
+                })
+            } else {
+                return (
+                    item
+                )
+            }
+        })
+    }
+    await Wallet.findByIdAndUpdate(walletBody._id, {$set: {coins: newCoins}, $push: {transactions: newTransaction._id}})
+    console.log(newTransaction._id)
+    res.json({
+        status: 200,
+        message: "successfully exchanged coins"
+    })
+})
 ```
