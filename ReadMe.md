@@ -152,7 +152,7 @@ As of now. may grow or change at the flow of the project.
 
 ## Code Snippet
 
-This code snippet takes a crypto transaction and updates both the transactions collection and the wallet collection. Im proud of it because It's the most complex data manipulation I've done on the backend so far.
+This code snippet takes a crypto transaction and updates both the transactions collection and the wallet collection. Im proud of it because It's the most complex data manipulation I've done on the backend so far. I had to check if the coin bought is already in the wallet or not, that way I could update the total amount if the coin that the user has. It also links the wallet and transactions collections by ID.
 
 ```
 router.post('/', async (req, res) => {
@@ -207,3 +207,5 @@ router.post('/', async (req, res) => {
     })
 })
 ```
+
+

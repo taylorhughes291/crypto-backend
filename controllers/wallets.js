@@ -5,10 +5,14 @@ const router = Router()
 
 //Get Index route
 router.get('/:id', async (req, res) => {
-    const wallets = await Wallet.findById(req.params.id)
+    const wallet = await Wallet.findById(req.params.id)
+    const transactions = await Transaction.find({userID: wallet._id})
     res.json({
         status: 200,
-        data: wallets
+        data: {
+            wallet: wallet,
+            transactions: transactions
+        }
     })
 })
 
