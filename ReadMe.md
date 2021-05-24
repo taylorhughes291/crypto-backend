@@ -23,20 +23,19 @@ From the returned data we will be able to see the some of the data depending on 
 ```
  "wallets":
 {
-	name: Taylor Hughes,
-	password: **********,
-  mobile: 3103670287,
-	email: example@aol.com
+	name: "Taylor Hughes",
+	password: "**********",
+    username: "taylorhughes291",
 	coins: [{
-			coin: BTC,
+			coin: "BTC",
 			amount: 0.23456
 		},
 		{
-			coin: ETH,
+			coin: "ETH",
 			amount: 0.8543
 		},
 		{
-			coin: USD,
+			coin: "USD",
 			amount: 20.34
 		}],
 	transactions: [
@@ -51,10 +50,10 @@ From the returned data we will be able to see the some of the data depending on 
  "transactions":
 {
 	_id: 746352,
-	userID: 3103670287
-	coinSold: BTC,
+	userID: "3103670287",
+	coinSold: "BTC",
 	amountSold: 0.0000543
-	coinBought: ETH,
+	coinBought: "ETH",
 	amountBought: 0.546222
 	Date: 05/15/21 4:35 PM
 }
@@ -67,8 +66,7 @@ and below is the schema:
 {
 	name: String,
 	password: String,
-	email: String,
-  mobile: String,
+	username: String,
 	coins: [
     {
       coin: String,
