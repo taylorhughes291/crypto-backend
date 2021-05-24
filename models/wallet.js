@@ -5,8 +5,7 @@ const Schema = mongoose.Schema
 const walletSchema = new Schema ({
     name: String,
 	password: String,
-	email: String,
-    mobile: String,
+    username: String,
 	coins: {type: [{
         coin: String,
         amount: Number

@@ -19,11 +19,11 @@ router.get('/:id', async (req, res) => {
 // Post route
 router.post('/', async (req, res) => {
     const body = req.body
-    const userCheck = await Wallet.find({mobile: body.mobile})
+    const userCheck = await Wallet.find({username: body.username})
     if (userCheck.length !== 0) {
         res.json({
             status: 403,
-            msg: "User mobile number already exists"
+            msg: "User already exists"
         })
     } else {
         const newWallet = await Wallet.create(body)
@@ -36,10 +36,10 @@ router.post('/', async (req, res) => {
 })
 
 //login verification
-router.get('/login/:mobile/:password', async (req, res) => {
-    const mobile = req.params.mobile
+router.get('/login/:username/:password', async (req, res) => {
+    const username = req.params.username
     const password = req.params.password
-    const wallet = await Wallet.findOne({mobile: mobile})
+    const wallet = await Wallet.findOne({username: username})
     const transactions = await Transaction.find({userID: wallet._id})
     console.log(password, wallet);
     if (password === wallet.password) {
