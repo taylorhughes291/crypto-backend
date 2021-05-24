@@ -28,7 +28,10 @@ app.get("/", (req, res) => res.send({
     msg: "Thank you for connecting to the Cryptos API!"
 }));
 
-// const cryptoRouter = require('./controllers/cryptos')
-// app.use('/cryptos', cryptoRouter)
+const walletsRouter = require('./controllers/wallets')
+app.use('/wallets', walletsRouter)
+
+const transactionsRouter = require('./controllers/transactions')
+app.use('/transactions', transactionsRouter)
 
 app.listen(PORT, () => console.log(`port running on ${PORT}`));
