@@ -3,6 +3,16 @@ const {Router} = require('express')
 const Transaction = require("../models/transaction")
 const router = Router()
 
+//Seed route
+router.delete('/seed', async (req, res) => {
+    await Wallet.deleteMany({})
+    await Transaction.deleteMany({})
+    res.json({
+        status: 200,
+        msg: "all db entries have been deleted."
+    })
+})
+
 //Get Index route
 router.get('/:id', async (req, res) => {
     const wallet = await Wallet.findById(req.params.id)
@@ -40,23 +50,29 @@ router.get('/login/:username/:password', async (req, res) => {
     const username = req.params.username
     const password = req.params.password
     const wallet = await Wallet.findOne({username: username})
-    const transactions = await Transaction.find({userID: wallet._id})
-    console.log(password, wallet);
-    if (password === wallet.password) {
-        res.json({
-            status: 200,
-            data: {
-                wallet: wallet,
-                transactions: transactions
-            }
-        })
+    if (wallet) {
+        const transactions = await Transaction.find({userID: wallet._id})
+        console.log(password, wallet);
+        if (password === wallet.password) {
+            res.json({
+                status: 200,
+                data: {
+                    wallet: wallet,
+                    transactions: transactions
+                }
+            })
+        } else {
+            res.json({
+                status: 403,
+                msg: "You have entered an incorrect password."
+            })
+        }
     } else {
         res.json({
-            status: 403,
-            msg: "You have entered an incorrect password."
+            status: 409,
+            msg: "This user does not exist."
         })
     }
-
 })
 
 //export

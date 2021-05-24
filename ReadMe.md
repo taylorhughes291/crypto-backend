@@ -94,16 +94,156 @@ and below is the schema:
 
 ```
 
-### Routes
-| Path | Route | Method | Return |
-| --- | --- | --- | --- |
-| '/' | Welcome Route | GET | "Thanks for accessing the Crypto API |
-| '/wallets/:id' | Wallet Index | GET | All Users and their wallets |
-| '/wallets' | Wallet Create | POST | Successful status message |
-| '/wallets/login/:mobile/:password' | Login Verification Route | GET | Login successful or login failed status |
-| '/transactions' | Transactions create route | POST | Successful status message |
+## Routes
+| # | Path | Route | Method | Return |
+| --- | --- | --- | --- | --- |
+| 1 | '/' | Welcome Route | GET | "Thanks for accessing the Crypto API |
+| 2 | '/wallets/:id' | Wallet Index | GET | All Users and their wallets |
+| 3 | '/wallets' | Wallet Create | POST | Successful status message |
+| 4 | '/wallets/login/:mobile/:password' | Login Verification Route | GET | Login successful or login failed status |
+| 5 | '/transactions' | Transactions create route | POST | Successful status message |
 
 
+## Route Responses
+Please see the below for the expected outputs of backend route responses.
+### 2. wallets/:id GET Index Route
+#### Case: Return all information
+When submitting url + /ID/ you should only get one type of response. You will receive all wallet and transaction information in the following format:
+```
+{
+    "status": 200,
+    "data": {
+        "wallet": {
+            "transactions": [
+                "60abd213474e5e060ebb5f49"
+            ],
+            "_id": "60abd1f9474e5e060ebb5f47",
+            "name": "Taylor Hughes",
+            "password": "password1234",
+            "username": "taylorhughes291",
+            "coins": [
+                {
+                    "_id": "60abd213474e5e060ebb5f4a",
+                    "coin": "USD",
+                    "amount": 200
+                },
+                {
+                    "_id": "60abd213474e5e060ebb5f4b",
+                    "coin": "BTC",
+                    "amount": 0.005
+                }
+            ],
+            "createdAt": "2021-05-24T16:19:05.826Z",
+            "updatedAt": "2021-05-24T16:19:31.284Z",
+            "__v": 0
+        },
+        "transactions": [
+            {
+                "_id": "60abd213474e5e060ebb5f49",
+                "userID": "60abd1f9474e5e060ebb5f47",
+                "coinSold": "USD",
+                "soldAmount": 400,
+                "coinBought": "BTC",
+                "boughtAmount": 0.0025,
+                "createdAt": "2021-05-24T16:19:31.278Z",
+                "updatedAt": "2021-05-24T16:19:31.278Z",
+                "__v": 0
+            }
+        ]
+    }
+}
+```
+
+### 3. wallet create POST request
+#### Case 1: User does not already exist
+In the successful case of the user not already existing, you will be returned a normal status 200 response with a message saying that the user has been successfully created. You will also receive the wallet data, although I don't believe it will be used since a useEffect for the Get Index route will be implemented upon redirect to App.js. Regardless, the data looks as follows:
+```
+{
+    "status": 200,
+    "msg": "Successfully created new wallet",
+    "data": {
+        "transactions": [],
+        "_id": "60abd4cc474e5e060ebb5f4c",
+        "name": "Taylor Hughes",
+        "password": "password1234",
+        "username": "taylorhughes291",
+        "coins": [
+            {
+                "_id": "60abd4cc474e5e060ebb5f4d",
+                "coin": "USD",
+                "amount": 1000
+            }
+        ],
+        "createdAt": "2021-05-24T16:31:08.595Z",
+        "updatedAt": "2021-05-24T16:31:08.595Z",
+        "__v": 0
+    }
+}
+```
+#### Case 2: Username already exists
+In the case that the user already exists in the database, the following response will be given:
+```
+{
+    "status": 403,
+    "msg": "User already exists"
+}
+```
+
+### 4. Wallets - login verification route
+#### Case 1: Username exists and password is correct
+In the case that the user exists amd the password is correct in the database, the following status 200 will be returned:
+```
+{
+    "status": 200,
+    "data": {
+        "wallet": {
+            "transactions": [],
+            "_id": "60abd4cc474e5e060ebb5f4c",
+            "name": "Taylor Hughes",
+            "password": "password1234",
+            "username": "taylorhughes291",
+            "coins": [
+                {
+                    "_id": "60abd4cc474e5e060ebb5f4d",
+                    "coin": "USD",
+                    "amount": 1000
+                }
+            ],
+            "createdAt": "2021-05-24T16:31:08.595Z",
+            "updatedAt": "2021-05-24T16:31:08.595Z",
+            "__v": 0
+        },
+        "transactions": []
+    }
+}
+```
+
+#### Case 2: Username does not exist
+In the case that the username doesn't exist, you will be returned a status 409 as follows: 
+```
+{
+    "status": 409,
+    "msg": "This user does not exist."
+}
+```
+
+#### Case 3: Password is incorrect
+In the case that the username exists and the password is incorrect you will be returned the following status 403 code:
+```
+{
+    "status": 403,
+    "msg": "You have entered an incorrect password."
+}
+```
+### 5. Transactions POST route
+#### Case 1: Transaction complete
+There will only be one case for this, although there is an expectation that the front-end will check the forms to make sure that the user has enough coin to cover any sell. In any case this will be the response:
+```
+{
+    "status": 200,
+    "message": "successfully exchanged coins"
+}
+```
 
 ### MVP/PostMVP - 5min
 
