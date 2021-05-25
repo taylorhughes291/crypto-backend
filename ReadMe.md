@@ -98,7 +98,7 @@ and below is the schema:
 | 1 | '/' | Welcome Route | GET | "Thanks for accessing the Crypto API |
 | 2 | '/wallets/:id' | Wallet Index | GET | All Users and their wallets |
 | 3 | '/wallets' | Wallet Create | POST | Successful status message |
-| 4 | '/wallets/login/:mobile/:password' | Login Verification Route | GET | Login successful or login failed status |
+| 4 | '/wallets/login/:username/:password' | Login Verification Route | GET | Login successful or login failed status |
 | 5 | '/transactions' | Transactions create route | POST | Successful status message |
 
 

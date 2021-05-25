@@ -16,6 +16,7 @@ const NODE_ENV = "development";
 // Middleware
 ////////////////////////////////
 
+NODE_ENV === "production" ? app.use(cors(corsOptions)) : app.use(cors());
 app.use(express.json());
 app.use(morgan("tiny")); //logging
 
