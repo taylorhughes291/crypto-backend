@@ -16,6 +16,7 @@ const NODE_ENV = "development";
 // Middleware
 ////////////////////////////////
 
+NODE_ENV === "production" ? app.use(cors(corsOptions)) : app.use(cors());
 app.use(express.json());
 app.use(morgan("tiny")); //logging
 
@@ -28,7 +29,10 @@ app.get("/", (req, res) => res.send({
     msg: "Thank you for connecting to the Cryptos API!"
 }));
 
-// const cryptoRouter = require('./controllers/cryptos')
-// app.use('/cryptos', cryptoRouter)
+const walletsRouter = require('./controllers/wallets')
+app.use('/wallets', walletsRouter)
+
+const transactionsRouter = require('./controllers/transactions')
+app.use('/transactions', transactionsRouter)
 
 app.listen(PORT, () => console.log(`port running on ${PORT}`));
