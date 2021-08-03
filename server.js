@@ -35,4 +35,7 @@ app.use('/wallets', walletsRouter)
 const transactionsRouter = require('./controllers/transactions')
 app.use('/transactions', transactionsRouter)
 
+const usersRouter = require('./controllers/users')
+app.use('/users', usersRouter)
+
 app.listen(PORT, () => console.log(`port running on ${PORT}`));
