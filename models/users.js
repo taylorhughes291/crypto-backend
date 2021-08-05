@@ -5,6 +5,7 @@ const Schema = mongoose.Schema
 const userSchema = new Schema ({
 	password: String,
     username: String,
+    name: String,
 }, {timestamps: true})
 
 //Publish the model

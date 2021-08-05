@@ -2,64 +2,23 @@ const Wallet = require("../models/wallet")
 const {Router} = require('express')
 const Transaction = require("../models/transaction")
 const router = Router()
+const auth = require("../auth");
+const jwt = require("jsonwebtoken")
 
-//Seed route
-router.delete('/seed', async (req, res) => {
-    await Wallet.deleteMany({})
-    await Transaction.deleteMany({})
+
+//get wallet
+router.get('/', auth, async (req, res) => {
+    const token = req.headers.authorization.split(" ")[1]
+    const payload = await jwt.verify(token, process.env.TOKEN_SECRET)
+    const wallet = await Wallet.findOne({user: payload._id})
+    const transactions = await Transaction.find({userID: payload._id})
     res.json({
         status: 200,
-        msg: "all db entries have been deleted."
-    })
-})
-
-// Post route
-router.post('/', async (req, res) => {
-    const body = req.body
-    const userCheck = await Wallet.find({username: body.username})
-    if (userCheck.length !== 0) {
-        res.json({
-            status: 403,
-            msg: "User already exists"
-        })
-    } else {
-        const newWallet = await Wallet.create(body)
-        res.json({
-            status: 200,
-            msg: "Successfully created new wallet",
-            data: newWallet
-        })
-    }
-})
-
-//login verification
-router.get('/login/:username/:password', async (req, res) => {
-    const username = req.params.username
-    const password = req.params.password
-    const wallet = await Wallet.findOne({username: username})
-    if (wallet) {
-        const transactions = await Transaction.find({userID: wallet._id})
-        console.log(password, wallet);
-        if (password === wallet.password) {
-            res.json({
-                status: 200,
-                data: {
-                    wallet: wallet,
-                    transactions: transactions
-                }
-            })
-        } else {
-            res.json({
-                status: 403,
-                msg: "You have entered an incorrect password."
-            })
+        data: {
+            wallet: wallet,
+            transactions: transactions
         }
-    } else {
-        res.json({
-            status: 409,
-            msg: "This user does not exist."
-        })
-    }
+    })
 })
 
 //export

@@ -17,23 +17,11 @@ router.delete('/seed', async (req, res) => {
     })
 })
 
-//Get Index route
-router.get('/:id', async (req, res) => {
-    const user = await User.findById(req.params.id)
-    const transactions = await Transaction.find({userID: user._id})
-    const wallet = await Wallet.find({userID: user._id})
-    res.json({
-        status: 200,
-        data: {
-            wallet: wallet,
-            transactions: transactions
-        }
-    })
-})
 
-// Post route
+// Post route - Create Account
 router.post('/', async (req, res) => {
     const body = req.body
+    console.log(body);
     const userCheck = await User.find({username: body.username})
     if (userCheck.length !== 0) {
         res.json({
@@ -45,16 +33,19 @@ router.post('/', async (req, res) => {
             const hashedPassword = await bcrypt.hash(body.password, 10)
             const user = {
                 username: body.username,
-                password: hashedPassword
+                password: hashedPassword,
+                name: body.name
             }
             const newUser = await User.create(user)
-            const newWallet = await Wallet.create({user: newUser._id})
+            await Wallet.create({user: newUser._id})
+            const accessToken = await jwt.sign(JSON.stringify(newUser), process.env.TOKEN_SECRET)
             res.json({
                 status: 200,
-                msg: "Successfully created new wallet",
-                data: newWallet
+                accessToken,
+                userID: newUser._id
             })
         } catch(e) {
+            console.log(e);
             res.json({message: "Error"})
         }
     }
@@ -64,29 +55,31 @@ router.post('/', async (req, res) => {
 router.get('/login/:username/:password', async (req, res) => {
     const username = req.params.username
     const password = req.params.password
-    const wallet = await Wallet.findOne({username: username})
-    if (wallet) {
-        const transactions = await Transaction.find({userID: wallet._id})
-        console.log(password, wallet);
-        if (password === wallet.password) {
-            res.json({
-                status: 200,
-                data: {
-                    wallet: wallet,
-                    transactions: transactions
-                }
-            })
+    const user = await User.findOne({username: username})
+    try {
+        if (user) {
+            const match = await bcrypt.compare(password, user.password)
+            const accessToken = await jwt.sign(JSON.stringify(user), process.env.TOKEN_SECRET)
+            if (match) {
+                res.json({
+                    accessToken,
+                    status: 200,
+                    userID: user._id
+                    })
+            } else {
+                res.json({
+                    status: 403,
+                    msg: "You have entered an incorrect password."
+                })
+            }
         } else {
             res.json({
-                status: 403,
-                msg: "You have entered an incorrect password."
+                status: 409,
+                msg: "This user does not exist."
             })
         }
-    } else {
-        res.json({
-            status: 409,
-            msg: "This user does not exist."
-        })
+    } catch(e) {
+        console.log(e);
     }
 })
 
