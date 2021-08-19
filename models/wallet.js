@@ -3,9 +3,10 @@ const Schema = mongoose.Schema
 
 //Wallet schema
 const walletSchema = new Schema ({
-    name: String,
-	password: String,
-    username: String,
+	user: {
+        ref: 'User',
+        type: mongoose.Schema.Types.ObjectId
+    },
 	coins: {type: [{
         coin: String,
         amount: Number
